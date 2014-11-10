@@ -1,0 +1,17 @@
+{
+  "name": "au-location-api",
+  "version": "0.1.0",
+  "description": "Location API for Australian Post addresses",
+  "author": "George Ma <z.george.ma@gmail.com> (http://github.com/z-george-ma/AuLocApi",
+  "devDependencies" : {
+    "fast-csv": "0.5.4",
+    "mocha": "2.x",
+    "should": "4.x"
+  },
+  "dependencies" : {
+    "sqlite3": "3.0.2",
+	"express": "4.x",
+	"config-node": "1.x"
+  },
+  "private": "true"
+}
