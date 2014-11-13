@@ -30,6 +30,7 @@ module.exports = function(db) {
   var sqlGetByPostcode = db.prepare("SELECT * FROM postcodes WHERE postcode = ?");
   var sqlGetBySuburb = db.prepare("SELECT * FROM postcodes WHERE suburb = ?");
   var sqlGetByPostcodeAndSuburb = db.prepare("SELECT * FROM postcodes WHERE postcode = ? AND suburb = ?");
+  var sqlGetByRadius = db.prepare("SELECT * FROM postcodes WHERE (latitude - $lat) * (latitude - $lat) + (longitude - $long) * (longitude - $long) < $rad * $rad"); 
 
   return {
     lookupPostcode: function(postcode, callback) {
@@ -55,6 +56,15 @@ module.exports = function(db) {
     getBySuburb: function(suburb, callback) {
       sqlGetBySuburb.reset(function() {
         sqlGetBySuburb.all(suburb.toLowerCase(), formatToTitleCase(callback));
+      });
+    },
+    getRadius: function(lat, _long, radius, callback) {
+      sqlGetByRadius.reset(function() {
+        sqlGetByRadius.all({
+          $lat: lat,
+          $long: _long,
+          $rad: radius
+        }, formatToTitleCase(callback));
       });
     }
   };

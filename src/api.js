@@ -37,4 +37,13 @@ module.exports = function(app, repo) {
       }
     }
   });
+
+  app.get("/radius", function(req, res) {
+    var lat = parseFloat(req.param("lat"));
+    var _long = parseFloat(req.param("long"));
+    var radius = parseFloat(req.param("rad"));
+    repo.getRadius(lat, _long, radius, function(e, r) {
+      res.json(r);
+    });
+  });
 }
