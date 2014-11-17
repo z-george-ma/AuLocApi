@@ -4,7 +4,7 @@
 NAME=AuLocApi-server
 DESC=AuLocApi-server
 USER=root
-PID_FILE=/var/run/aulocapi/pid
+PID_FILE=/var/run/aulocapi.pid
 CMD="cd /opt/AuLocApi/src && node server.js &"
 LOCK_FILE=/var/lock/subsys/$NAME
 

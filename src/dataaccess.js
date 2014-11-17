@@ -27,10 +27,10 @@ function formatToTitleCase(callback) {
 module.exports = function(db) {
   var sqlPostcodeLookup = db.prepare("SELECT postcode, suburb, state FROM postcodes WHERE postcode like ?");
   var sqlSuburbLookup = db.prepare("SELECT postcode, suburb, state FROM postcodes WHERE suburb like ?");
-  var sqlGetByPostcode = db.prepare("SELECT * FROM postcodes WHERE postcode = ?");
-  var sqlGetBySuburb = db.prepare("SELECT * FROM postcodes WHERE suburb = ?");
-  var sqlGetByPostcodeAndSuburb = db.prepare("SELECT * FROM postcodes WHERE postcode = ? AND suburb = ?");
-  var sqlGetByRadius = db.prepare("SELECT * FROM postcodes WHERE (latitude - $lat) * (latitude - $lat) + (longitude - $long) * (longitude - $long) < $rad * $rad"); 
+  var sqlGetByPostcode = db.prepare("SELECT postcode, suburb, state, latitude, longitude FROM postcodes WHERE postcode = ?");
+  var sqlGetBySuburb = db.prepare("SELECT postcode, suburb, state, latitude, longitude FROM postcodes WHERE suburb = ?");
+  var sqlGetByPostcodeAndSuburb = db.prepare("SELECT postcode, suburb, state, latitude, longitude FROM postcodes WHERE postcode = ? AND suburb = ?");
+  var sqlGetByRadius = db.prepare("SELECT postcode, suburb, state, latitude, longitude FROM postcodes WHERE (1-latcos*$latcos-latsin*$latsin)/2 +latcos*$latcos*(1-longcos*$longcos-longsin*$longsin)/2 < $rad"); 
 
   return {
     lookupPostcode: function(postcode, callback) {
@@ -58,12 +58,18 @@ module.exports = function(db) {
         sqlGetBySuburb.all(suburb.toLowerCase(), formatToTitleCase(callback));
       });
     },
-    getRadius: function(lat, _long, radius, callback) {
+    getRadius: function(lat, _long, distance, callback) {
       sqlGetByRadius.reset(function() {
+		var radius = Math.sin(distance / 2 / 6371),
+			latrad = lat * Math.PI / 180,
+			longrad = _long * Math.PI / 180;
+
         sqlGetByRadius.all({
-          $lat: lat,
-          $long: _long,
-          $rad: radius
+          $latsin: Math.sin(latrad),
+		  $latcos: Math.cos(latrad),
+          $longsin: Math.sin(longrad),
+		  $longcos: Math.cos(longrad),
+          $rad: radius * radius
         }, formatToTitleCase(callback));
       });
     }
