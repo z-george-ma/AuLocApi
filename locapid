@@ -1,0 +1,62 @@
+#!/bin/sh
+# chkconfig: 35 90 5 
+
+NAME=AuLocApi-server
+DESC=AuLocApi-server
+USER=root
+PID_FILE=/var/run/aulocapi/pid
+CMD="cd /opt/AuLocApi/src && node server.js &"
+LOCK_FILE=/var/lock/subsys/$NAME
+
+. /etc/init.d/functions
+
+RETVAL=0
+
+remove_pid () {
+    rm -f ${PID_FILE}
+}
+
+start () {
+    daemon --user $USER --pidfile $PID_FILE $CMD
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && touch $LOCK_FILE
+    return $RETVAL
+}
+
+stop () {
+    killproc -p $PID_FILE
+    RETVAL=$?
+    rm -f $LOCK_FILE
+    rm -f $PID_FILE
+    return $RETVAL
+}
+
+restart () {
+    stop_rhodecode
+    start_rhodecode
+    RETVAL=$?
+}
+
+case "$1" in
+  start)
+    echo -n $"Starting $DESC: "
+    start
+    echo
+    ;;
+  stop)
+    echo -n $"Stopping $DESC: "
+    stop
+    echo
+    ;;
+  restart)
+    echo -n $"Restarting $DESC: "
+    restart
+    echo
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart}"
+    RETVAL=1
+    ;;
+esac
+
+exit $RETVAL
