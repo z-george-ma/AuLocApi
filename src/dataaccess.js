@@ -35,7 +35,7 @@ module.exports = function(db) {
   return {
     lookupPostcode: function(postcode, callback) {
       sqlPostcodeLookup.reset(function() {
-        sqlPostcodeLookup.all(postcode+"%", formatToTitleCase(callback));
+        sqlPostcodeLookup.all(parseInt(postcode)+"%", formatToTitleCase(callback));
       });
     },
     lookupSuburb: function(suburb, callback) {
@@ -45,12 +45,12 @@ module.exports = function(db) {
     },
     getByPostcodeAndSuburb: function(postcode, suburb, callback) {
       sqlGetByPostcodeAndSuburb.reset(function() {
-        sqlGetByPostcodeAndSuburb.get(postcode, suburb.toLowerCase(), formatSingleToTitleCase(callback));
+        sqlGetByPostcodeAndSuburb.get(parseInt(postcode).toString(), suburb.toLowerCase(), formatSingleToTitleCase(callback));
       });
     },
     getByPostcode: function(postcode, callback) {
       sqlGetByPostcode.reset(function() {
-        sqlGetByPostcode.all(postcode, formatToTitleCase(callback));
+        sqlGetByPostcode.all(parseInt(postcode).toString(), formatToTitleCase(callback));
       });
     },
     getBySuburb: function(suburb, callback) {

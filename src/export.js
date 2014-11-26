@@ -4,7 +4,8 @@ var sqlite3 = require("sqlite3");
 
 var createDb = function(sqlite3, name) {
   var db = new sqlite3.Database(name);
-  db.exec("CREATE TABLE postcodes (postcode TEXT, suburb TEXT, state TEXT, latitude REAL, longitude REAL, latsin REAL, latcos REAL, longsin REAL, longcos REAL); \
+  db.exec("DROP TABLE IF EXISTS postcodes; \
+CREATE TABLE postcodes (postcode TEXT, suburb TEXT, state TEXT, latitude REAL, longitude REAL, latsin REAL, latcos REAL, longsin REAL, longcos REAL); \
 CREATE INDEX idx_postcodes_postcode on postcodes(postcode); \
 CREATE INDEX idx_postcodes_suburb on postcodes(suburb);");
 
@@ -22,6 +23,7 @@ var csvStream = csv({
       cache[cache.length] = {
         $pcode: data.Pcode,
         $suburb: data.Locality.toLowerCase(),
+        $category: data.Category.trim().toLowerCase(),
         $state: data.State,
         $lat: data.Lat,
         $long: data.Long,
@@ -33,12 +35,11 @@ var csvStream = csv({
     })
     .on("end", function(){
       db.exec("BEGIN");
-      var previous = {};
       cache.forEach(function(x) {
-        if (x.$pcode < "8000" && (x.$pcode != previous.$pcode || x.$suburb != previous.$suburb)) {
+        if (x.$category == "delivery area") {
+		  delete x.$category;
           db.run("INSERT INTO postcodes VALUES($pcode, $suburb, $state, $lat, $long, $latsin, $latcos, $longsin, $longcos)", x);
         }
-        previous = x;
       });
       db.exec("COMMIT");
       db.close();
