@@ -8,5 +8,3 @@ var repo = require("./dataaccess.js")(db);
 require("./api.js")(app, repo);
 
 app.listen(config.port);
-
-
