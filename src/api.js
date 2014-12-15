@@ -16,7 +16,7 @@ module.exports = function(app, repo) {
     var suburb = req.param("s");
     if (!postcode) {
       if (!suburb) {
-        res.status(403);
+        res.status(400).end();
       }
       else {
         repo.getBySuburb(suburb, function(e, r) {
@@ -44,6 +44,20 @@ module.exports = function(app, repo) {
     var radius = parseFloat(req.param("rad"));
     repo.getRadius(lat, _long, radius, function(e, r) {
       res.json(r);
+    });
+  });
+  
+  app.get("/healthcheck", function(req, res) {
+    repo.lookupPostcode("3000", function(e, r) {
+      try {
+        if(r[0].suburb === "Melbourne")
+          res.status(200).end();
+        else
+          res.status(500).end();
+      }
+      catch(e) {
+        res.status(500).end();
+      }
     });
   });
 }
