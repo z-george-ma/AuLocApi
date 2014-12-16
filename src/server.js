@@ -6,5 +6,6 @@ var db = new sqlite3.Database("./postcodes.sqlite");
 var repo = require("./dataaccess.js")(db);
 
 require("./api.js")(app, repo);
+require("./healthcheck.js")(app, config.port);
 
 app.listen(config.port);

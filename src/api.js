@@ -46,18 +46,4 @@ module.exports = function(app, repo) {
       res.json(r);
     });
   });
-  
-  app.get("/healthcheck", function(req, res) {
-    repo.lookupPostcode("3000", function(e, r) {
-      try {
-        if(r[0].suburb === "Melbourne")
-          res.status(200).end();
-        else
-          res.status(500).end();
-      }
-      catch(e) {
-        res.status(500).end();
-      }
-    });
-  });
 }

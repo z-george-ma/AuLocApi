@@ -10,8 +10,9 @@
   },
   "dependencies" : {
     "sqlite3": "3.0.2",
-	"express": "4.x",
-	"config-node": "1.x"
+    "express": "4.x",
+    "config-node": "1.x",
+    "request": "2.x"
   },
   "private": "true"
 }
