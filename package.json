@@ -1,0 +1,27 @@
+{
+  "name": "AuLocApi-Build",
+  "version": "1.0.0",
+  "description": "Build task for AuLocApi",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.8.10"
+  },
+  "devDependencies": {
+    "del": "^1.1.0",
+    "gulp": "^3.8.10",
+    "gulp-run": "^1.6.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/z-george-ma/AuLocApi.git"
+  },
+  "author": "George Ma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/z-george-ma/AuLocApi/issues"
+  },
+  "homepage": "https://github.com/z-george-ma/AuLocApi"
+}

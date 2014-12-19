@@ -2,7 +2,7 @@ require("should")
 
 var sqlite3 = require("sqlite3");
 var db = new sqlite3.Database("postcodes.sqlite");
-var repo = require("../../dataaccess.js")(db);
+var repo = require("../dataaccess.js")(db);
 
 describe("Get record with suburb Box Hill South and postcode 3128", function() {
   var record;

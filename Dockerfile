@@ -6,5 +6,5 @@ ENV DEST_DIR /api/
 ADD . $DEST_DIR
 WORKDIR $DEST_DIR
 RUN ["npm", "install", "--production"] 
-ENTRYPOINT ["node", "server.js"]
+ENTRYPOINT ["node", "server"]
 EXPOSE 80

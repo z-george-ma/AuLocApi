@@ -14,5 +14,8 @@
     "config-node": "1.x",
     "request": "2.x"
   },
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha"
+  },
   "private": "true"
 }
