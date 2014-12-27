@@ -17,7 +17,8 @@ coverage
 .grunt
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
+build
+output
 
 # Dependency directory
 # Commenting this out is preferred by some people, see
@@ -28,3 +29,6 @@ node_modules
 .lock-wscript
 
 *.sqlite
+
+.vagrant
+docker.tar.gz
