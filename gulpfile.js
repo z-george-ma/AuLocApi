@@ -2,14 +2,15 @@ var gulp = require('gulp');
 var del = require('del');
 var run = require('gulp-run');
 
-gulp.task('copy', ['clean'], function() {
+gulp.task('copy', ['clean'], function(cb) {
   return gulp.src(['src/**/*'])
              .pipe(gulp.dest('build'));
-  
 });
 
 gulp.task('clean', function(cb) {
-  del(['build', 'output'], cb);
+  del(['build', 'output'], function() {
+    run('docker rmi -f aulocapi || true').exec(cb);
+  });
 });
 
 gulp.task('export', ['copy'], function(cb) {
@@ -30,10 +31,22 @@ gulp.task('build', ['test'], function(cb) {
               gulp.src(['Dockerfile'])
                   .pipe(gulp.dest('output/'))
                   .on('end', function() {
-                    run('docker build -t aulocapi . && docker save aulocapi | gzip > ../docker.tar.gz', {cwd:'output'}).exec(cb);
+                    cb();
                   });
             });
       });
   
+});
+
+gulp.task('docker-build', ['build'], function(cb) {
+  run('docker build -t aulocapi .', {cwd:'output'}).exec(cb);
+});
+
+gulp.task('docker-export', ['docker-build'], function(cb) {
+  run('docker export aulocapi | gzip > ../docker.tar.gz', {cwd:'output'}).exec(cb);
+});
+
+gulp.task('docker-run', ['docker-build'], function(cb) {
+  run('docker run -p 80:80 -d aulocapi', {cwd:'output'}).exec(cb);
 });
 
